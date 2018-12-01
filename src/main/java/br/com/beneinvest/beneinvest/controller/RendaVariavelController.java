@@ -1,8 +1,9 @@
 package br.com.beneinvest.beneinvest.controller;
 
-import br.com.beneinvest.beneinvest.domain.entity.AtivoRendaVariavel;
+import br.com.beneinvest.beneinvest.domain.entity.AtivoPortfolioRendaVariavel;
 import br.com.beneinvest.beneinvest.domain.response.ConsultaAtivosResponse;
 import br.com.beneinvest.beneinvest.domain.response.CotacaoAtivoResponse;
+import br.com.beneinvest.beneinvest.domain.response.Posicao;
 import br.com.beneinvest.beneinvest.service.RendaVariavelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,13 +28,18 @@ public class RendaVariavelController {
     }
 
     @PostMapping("/adicionarAtivoPortfolio")
-    public ResponseEntity<AtivoRendaVariavel> adicionarAtivoPortfolio(@RequestBody AtivoRendaVariavel ativoRendaVariavel) {
-        return new ResponseEntity<AtivoRendaVariavel>(rendaVariavelService.adicionarAtivoPortfolio(ativoRendaVariavel), HttpStatus.CREATED);
+    public ResponseEntity<AtivoPortfolioRendaVariavel> adicionarAtivoPortfolio(@RequestBody AtivoPortfolioRendaVariavel ativoPortfolioRendaVariavel) {
+        return new ResponseEntity<AtivoPortfolioRendaVariavel>(rendaVariavelService.adicionarAtivoPortfolio(ativoPortfolioRendaVariavel), HttpStatus.CREATED);
     }
 
     @GetMapping("/portfolio")
-    public ResponseEntity<Iterable<AtivoRendaVariavel>> obterPortfolio() {
-        return new ResponseEntity<Iterable<AtivoRendaVariavel>>(rendaVariavelService.obterPortfolio(), HttpStatus.OK);
+    public ResponseEntity<Iterable<AtivoPortfolioRendaVariavel>> obterPortfolio() {
+        return new ResponseEntity<Iterable<AtivoPortfolioRendaVariavel>>(rendaVariavelService.obterPortfolio(), HttpStatus.OK);
+    }
+
+    @GetMapping("/posicao")
+    public ResponseEntity<Posicao> obterPosicaoAtual() {
+        return new ResponseEntity<Posicao>(rendaVariavelService.obterPosicaoAtual(), HttpStatus.OK);
     }
 
 }

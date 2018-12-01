@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-public class AtivoRendaVariavel {
+public class AtivoPortfolioRendaVariavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
