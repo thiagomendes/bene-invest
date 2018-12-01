@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 @Entity
 public class AtivoRendaVariavel {
@@ -18,11 +18,11 @@ public class AtivoRendaVariavel {
 
     private String nome;
 
-    private ZonedDateTime dataCompra;
+    private LocalDate dataCompra;
 
     private BigDecimal valorPagoUnidade;
 
-    private Integer quantidade;
+        private Integer quantidade;
 
     public Long getId() {
         return id;
@@ -48,11 +48,11 @@ public class AtivoRendaVariavel {
         this.nome = nome;
     }
 
-    public ZonedDateTime getDataCompra() {
+    public LocalDate getDataCompra() {
         return dataCompra;
     }
 
-    public void setDataCompra(ZonedDateTime dataCompra) {
+    public void setDataCompra(LocalDate dataCompra) {
         this.dataCompra = dataCompra;
     }
 
