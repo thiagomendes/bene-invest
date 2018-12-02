@@ -1,6 +1,7 @@
 package br.com.beneinvest.beneinvest.service;
 
 import br.com.beneinvest.beneinvest.domain.client.AlphaVantageClient;
+import br.com.beneinvest.beneinvest.domain.client.GuiaInvestClient;
 import br.com.beneinvest.beneinvest.domain.entity.AtivoPortfolioRendaVariavel;
 import br.com.beneinvest.beneinvest.domain.response.ConsultaAtivosResponse;
 import br.com.beneinvest.beneinvest.domain.response.CotacaoAtivoResponse;
@@ -23,6 +24,9 @@ public class RendaVariavelService {
     private AlphaVantageClient alphaVantageClient;
 
     @Autowired
+    private GuiaInvestClient guiaInvestClient;
+
+    @Autowired
     private AtivoRendaVariavelRepository ativoRendaVariavelRepository;
 
     public ConsultaAtivosResponse consultarAtivos(String codigoPapel) {
@@ -30,7 +34,8 @@ public class RendaVariavelService {
     }
 
     public CotacaoAtivoResponse cotarAtivo(String codigoPapel) {
-        return alphaVantageClient.cotarAtivo(codigoPapel, alphaVantageApiKey);
+        //return alphaVantageClient.cotarAtivo(codigoPapel, alphaVantageApiKey);
+        return guiaInvestClient.cotarAtivo(codigoPapel);
     }
 
     public AtivoPortfolioRendaVariavel adicionarAtivoPortfolio(AtivoPortfolioRendaVariavel ativoPortfolioRendaVariavel) {
@@ -52,9 +57,11 @@ public class RendaVariavelService {
             PosicaoPorAtivo posicaoPorAtivo = new PosicaoPorAtivo();
             posicaoPorAtivo.setAtivoPortfolioRendaVariavel(i);
 
-            CotacaoAtivoResponse cotacaoAtivoResponse = alphaVantageClient.cotarAtivo(i.getCodigo(), alphaVantageApiKey);
+            //CotacaoAtivoResponse cotacaoAtivoResponse = alphaVantageClient.cotarAtivo(i.getCodigo(), alphaVantageApiKey);
+            CotacaoAtivoResponse cotacaoAtivoResponse = guiaInvestClient.cotarAtivo(i.getCodigo());
+            System.out.println(cotacaoAtivoResponse);
             posicaoPorAtivo.setCotacaoAtual(new BigDecimal(cotacaoAtivoResponse.getGlobalQuote().get05Price()));
-            posicaoPorAtivo.setVariacaoDia(new BigDecimal(cotacaoAtivoResponse.getGlobalQuote().get09Change()));
+            //posicaoPorAtivo.setVariacaoDia(new BigDecimal(cotacaoAtivoResponse.getGlobalQuote().get09Change()));
             posicaoPorAtivo.setPercentualVariacaoDia(cotacaoAtivoResponse.getGlobalQuote().get10ChangePercent());
 
             posicaoPorAtivo.setLucroPrejuizo(

@@ -24,4 +24,8 @@ public class CotacaoAtivoResponse {
         this.globalQuote = globalQuote;
     }
 
+    @Override
+    public String toString() {
+        return globalQuote.get05Price() + "|" + globalQuote.get10ChangePercent();
+    }
 }
