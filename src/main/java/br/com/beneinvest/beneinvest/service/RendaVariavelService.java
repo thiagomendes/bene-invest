@@ -1,7 +1,7 @@
 package br.com.beneinvest.beneinvest.service;
 
 import br.com.beneinvest.beneinvest.domain.client.AlphaVantageClient;
-import br.com.beneinvest.beneinvest.domain.client.GuiaInvestClient;
+import br.com.beneinvest.beneinvest.domain.client.YahooFinanceClient;
 import br.com.beneinvest.beneinvest.domain.entity.AtivoPortfolioRendaVariavel;
 import br.com.beneinvest.beneinvest.domain.response.ConsultaAtivosResponse;
 import br.com.beneinvest.beneinvest.domain.response.CotacaoAtivoResponse;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Service
 public class RendaVariavelService {
@@ -24,7 +25,7 @@ public class RendaVariavelService {
     private AlphaVantageClient alphaVantageClient;
 
     @Autowired
-    private GuiaInvestClient guiaInvestClient;
+    private YahooFinanceClient yahooFinanceClient;
 
     @Autowired
     private AtivoRendaVariavelRepository ativoRendaVariavelRepository;
@@ -34,8 +35,7 @@ public class RendaVariavelService {
     }
 
     public CotacaoAtivoResponse cotarAtivo(String codigoPapel) {
-        //return alphaVantageClient.cotarAtivo(codigoPapel, alphaVantageApiKey);
-        return guiaInvestClient.cotarAtivo(codigoPapel);
+        return yahooFinanceClient.cotarAtivo(codigoPapel);
     }
 
     public AtivoPortfolioRendaVariavel adicionarAtivoPortfolio(AtivoPortfolioRendaVariavel ativoPortfolioRendaVariavel) {
@@ -57,22 +57,21 @@ public class RendaVariavelService {
             PosicaoPorAtivo posicaoPorAtivo = new PosicaoPorAtivo();
             posicaoPorAtivo.setAtivoPortfolioRendaVariavel(i);
 
-            //CotacaoAtivoResponse cotacaoAtivoResponse = alphaVantageClient.cotarAtivo(i.getCodigo(), alphaVantageApiKey);
-            CotacaoAtivoResponse cotacaoAtivoResponse = guiaInvestClient.cotarAtivo(i.getCodigo());
-            System.out.println(cotacaoAtivoResponse);
-            posicaoPorAtivo.setCotacaoAtual(new BigDecimal(cotacaoAtivoResponse.getGlobalQuote().get05Price()));
-            //posicaoPorAtivo.setVariacaoDia(new BigDecimal(cotacaoAtivoResponse.getGlobalQuote().get09Change()));
-            posicaoPorAtivo.setPercentualVariacaoDia(cotacaoAtivoResponse.getGlobalQuote().get10ChangePercent());
+            CotacaoAtivoResponse cotacaoAtivoResponse = yahooFinanceClient.cotarAtivo(i.getCodigo());
 
-            posicaoPorAtivo.setLucroPrejuizo(
-                    (posicaoPorAtivo.getCotacaoAtual().multiply(BigDecimal.valueOf(i.getQuantidade())))
-                            .subtract((i.getValorPagoUnidade().multiply(BigDecimal.valueOf(i.getQuantidade())))));
+            if (Objects.nonNull(cotacaoAtivoResponse)) {
+                posicaoPorAtivo.setCotacaoAtivoResponse(cotacaoAtivoResponse);
 
-            posicao.getListaPosicaoPorAtivos().add(posicaoPorAtivo);
-            posicao.setValorAtual(posicao.getValorAtual().add(posicaoPorAtivo.getCotacaoAtual().multiply(new BigDecimal(i.getQuantidade()))));
-            posicao.setValorInvestido(posicao.getValorInvestido().add(new BigDecimal(i.getValorPagoUnidade().doubleValue() * i.getQuantidade())));
-            posicao.setLucroPrejuizo(posicao.getLucroPrejuizo().add(posicaoPorAtivo.getLucroPrejuizo()));
+                posicaoPorAtivo.setLucroPrejuizo(
+                        (posicaoPorAtivo.getCotacaoAtivoResponse().getPreco().multiply(BigDecimal.valueOf(i.getQuantidade())))
+                                .subtract((i.getValorPagoUnidade().multiply(BigDecimal.valueOf(i.getQuantidade())))));
 
+                posicao.getListaPosicaoPorAtivos().add(posicaoPorAtivo);
+                posicao.setValorAtual(posicao.getValorAtual().add(posicaoPorAtivo.getCotacaoAtivoResponse().getPreco().multiply(new BigDecimal(i.getQuantidade()))));
+                posicao.setValorInvestido(posicao.getValorInvestido().add(new BigDecimal(i.getValorPagoUnidade().doubleValue() * i.getQuantidade())));
+                posicao.setLucroPrejuizo(posicao.getLucroPrejuizo().add(posicaoPorAtivo.getLucroPrejuizo()));
+
+            }
         });
 
         return posicao;

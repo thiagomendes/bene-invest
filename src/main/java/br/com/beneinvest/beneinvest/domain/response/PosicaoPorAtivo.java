@@ -8,11 +8,7 @@ public class PosicaoPorAtivo {
 
     private AtivoPortfolioRendaVariavel ativoPortfolioRendaVariavel;
 
-    private BigDecimal cotacaoAtual = new BigDecimal(0);
-
-    private String percentualVariacaoDia;
-
-    private BigDecimal variacaoDia = new BigDecimal(0);
+    private CotacaoAtivoResponse cotacaoAtivoResponse;
 
     private BigDecimal lucroPrejuizo = new BigDecimal(0);
 
@@ -24,28 +20,12 @@ public class PosicaoPorAtivo {
         this.ativoPortfolioRendaVariavel = ativoPortfolioRendaVariavel;
     }
 
-    public BigDecimal getCotacaoAtual() {
-        return cotacaoAtual;
+    public CotacaoAtivoResponse getCotacaoAtivoResponse() {
+        return cotacaoAtivoResponse;
     }
 
-    public void setCotacaoAtual(BigDecimal cotacaoAtual) {
-        this.cotacaoAtual = cotacaoAtual;
-    }
-
-    public String getPercentualVariacaoDia() {
-        return percentualVariacaoDia;
-    }
-
-    public void setPercentualVariacaoDia(String percentualVariacaoDia) {
-        this.percentualVariacaoDia = percentualVariacaoDia;
-    }
-
-    public BigDecimal getVariacaoDia() {
-        return variacaoDia;
-    }
-
-    public void setVariacaoDia(BigDecimal variacaoDia) {
-        this.variacaoDia = variacaoDia;
+    public void setCotacaoAtivoResponse(CotacaoAtivoResponse cotacaoAtivoResponse) {
+        this.cotacaoAtivoResponse = cotacaoAtivoResponse;
     }
 
     public BigDecimal getLucroPrejuizo() {

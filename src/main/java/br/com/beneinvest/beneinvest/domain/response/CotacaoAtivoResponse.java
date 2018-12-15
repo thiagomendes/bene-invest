@@ -1,31 +1,65 @@
 
 package br.com.beneinvest.beneinvest.domain.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.math.BigDecimal;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "Global Quote"
-})
 public class CotacaoAtivoResponse {
 
-    @JsonProperty("Global Quote")
-    private GlobalQuote globalQuote;
+    private String codigoPapel;
 
-    @JsonProperty("Global Quote")
-    public GlobalQuote getGlobalQuote() {
-        return globalQuote;
+    private String nome;
+
+    private BigDecimal preco;
+
+    private BigDecimal percentualVariacao;
+
+    private BigDecimal variacao;
+
+    public CotacaoAtivoResponse(String codigoPapel, String nome, BigDecimal preco, BigDecimal percentualVariacao, BigDecimal variacao) {
+        this.codigoPapel = codigoPapel;
+        this.nome = nome;
+        this.preco = preco;
+        this.percentualVariacao = percentualVariacao;
+        this.variacao = variacao;
     }
 
-    @JsonProperty("Global Quote")
-    public void setGlobalQuote(GlobalQuote globalQuote) {
-        this.globalQuote = globalQuote;
+    public String getCodigoPapel() {
+        return codigoPapel;
     }
 
-    @Override
-    public String toString() {
-        return globalQuote.get05Price() + "|" + globalQuote.get10ChangePercent();
+    public void setCodigoPapel(String codigoPapel) {
+        this.codigoPapel = codigoPapel;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
+
+    public BigDecimal getPercentualVariacao() {
+        return percentualVariacao;
+    }
+
+    public void setPercentualVariacao(BigDecimal percentualVariacao) {
+        this.percentualVariacao = percentualVariacao;
+    }
+
+    public BigDecimal getVariacao() {
+        return variacao;
+    }
+
+    public void setVariacao(BigDecimal variacao) {
+        this.variacao = variacao;
     }
 }
