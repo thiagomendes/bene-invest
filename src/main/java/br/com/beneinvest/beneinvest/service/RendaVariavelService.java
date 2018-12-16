@@ -43,7 +43,11 @@ public class RendaVariavelService {
     }
 
     public Iterable<AtivoPortfolioRendaVariavel> obterPortfolio() {
-        return ativoRendaVariavelRepository.findAll();
+        Iterable<AtivoPortfolioRendaVariavel> all = ativoRendaVariavelRepository.findAll();
+        all.forEach(i -> {
+            atualizaValoresAtivo(i);
+        });
+        return all;
     }
 
     public Posicao obterPosicaoAtual() {
@@ -56,24 +60,37 @@ public class RendaVariavelService {
 
             PosicaoPorAtivo posicaoPorAtivo = new PosicaoPorAtivo();
             posicaoPorAtivo.setAtivoPortfolioRendaVariavel(i);
+            atualizaValoresAtivo(i);
 
-            CotacaoAtivoResponse cotacaoAtivoResponse = yahooFinanceClient.cotarAtivo(i.getCodigo());
+            posicaoPorAtivo.setLucroPrejuizo(
+                    (i.getPreco().multiply(BigDecimal.valueOf(i.getQuantidade())))
+                            .subtract((i.getValorPagoUnidade().multiply(BigDecimal.valueOf(i.getQuantidade())))));
 
-            if (Objects.nonNull(cotacaoAtivoResponse)) {
-                posicaoPorAtivo.setCotacaoAtivoResponse(cotacaoAtivoResponse);
+            posicaoPorAtivo.setValorTotalInvestido(
+                    posicaoPorAtivo.getAtivoPortfolioRendaVariavel().getValorPagoUnidade()
+                            .multiply(BigDecimal.valueOf(posicaoPorAtivo.getAtivoPortfolioRendaVariavel().getQuantidade())));
 
-                posicaoPorAtivo.setLucroPrejuizo(
-                        (posicaoPorAtivo.getCotacaoAtivoResponse().getPreco().multiply(BigDecimal.valueOf(i.getQuantidade())))
-                                .subtract((i.getValorPagoUnidade().multiply(BigDecimal.valueOf(i.getQuantidade())))));
+            posicaoPorAtivo.setValorTotalAtual(
+                    i.getPreco().multiply(BigDecimal.valueOf(posicaoPorAtivo.getAtivoPortfolioRendaVariavel().getQuantidade())));
 
-                posicao.getListaPosicaoPorAtivos().add(posicaoPorAtivo);
-                posicao.setValorAtual(posicao.getValorAtual().add(posicaoPorAtivo.getCotacaoAtivoResponse().getPreco().multiply(new BigDecimal(i.getQuantidade()))));
-                posicao.setValorInvestido(posicao.getValorInvestido().add(new BigDecimal(i.getValorPagoUnidade().doubleValue() * i.getQuantidade())));
-                posicao.setLucroPrejuizo(posicao.getLucroPrejuizo().add(posicaoPorAtivo.getLucroPrejuizo()));
-
-            }
+            posicao.getListaPosicaoPorAtivos().add(posicaoPorAtivo);
+            posicao.setValorAtual(posicao.getValorAtual().add(i.getPreco().multiply(new BigDecimal(i.getQuantidade()))));
+            posicao.setValorInvestido(posicao.getValorInvestido().add(new BigDecimal(i.getValorPagoUnidade().doubleValue() * i.getQuantidade())));
+            posicao.setLucroPrejuizo(posicao.getLucroPrejuizo().add(posicaoPorAtivo.getLucroPrejuizo()));
         });
 
         return posicao;
+    }
+
+    public void atualizaValoresAtivo(AtivoPortfolioRendaVariavel ativo) {
+        if (Objects.equals("Ações", ativo.getTipoAtivo().getDescricao())) {
+            CotacaoAtivoResponse cotacaoAtivoResponse = yahooFinanceClient.cotarAtivo(ativo.getCodigo());
+            if (Objects.nonNull(cotacaoAtivoResponse)) {
+                ativo.setPreco(cotacaoAtivoResponse.getPreco());
+                ativo.setVariacao(cotacaoAtivoResponse.getVariacao());
+                ativo.setPercentualVariacao(cotacaoAtivoResponse.getPercentualVariacao());
+                ativoRendaVariavelRepository.save(ativo);
+            }
+        }
     }
 }

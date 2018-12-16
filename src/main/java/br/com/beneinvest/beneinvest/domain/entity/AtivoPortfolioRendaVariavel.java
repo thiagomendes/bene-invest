@@ -1,9 +1,6 @@
 package br.com.beneinvest.beneinvest.domain.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -20,9 +17,18 @@ public class AtivoPortfolioRendaVariavel {
 
     private LocalDate dataCompra;
 
-    private BigDecimal valorPagoUnidade;
+    private BigDecimal valorPagoUnidade = BigDecimal.ZERO;
 
-        private Integer quantidade;
+    private Integer quantidade;
+
+    @ManyToOne
+    private TipoAtivo tipoAtivo;
+
+    private BigDecimal preco = BigDecimal.ZERO;
+
+    private BigDecimal percentualVariacao = BigDecimal.ZERO;
+
+    private BigDecimal variacao = BigDecimal.ZERO;
 
     public Long getId() {
         return id;
@@ -57,7 +63,7 @@ public class AtivoPortfolioRendaVariavel {
     }
 
     public BigDecimal getValorPagoUnidade() {
-        return valorPagoUnidade;
+        return valorPagoUnidade.setScale(2, BigDecimal.ROUND_UP);
     }
 
     public void setValorPagoUnidade(BigDecimal valorPagoUnidade) {
@@ -70,5 +76,37 @@ public class AtivoPortfolioRendaVariavel {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public TipoAtivo getTipoAtivo() {
+        return tipoAtivo;
+    }
+
+    public void setTipoAtivo(TipoAtivo tipoAtivo) {
+        this.tipoAtivo = tipoAtivo;
+    }
+
+    public BigDecimal getPreco() {
+        return preco.setScale(2, BigDecimal.ROUND_UP);
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
+
+    public BigDecimal getPercentualVariacao() {
+        return percentualVariacao.setScale(2, BigDecimal.ROUND_UP);
+    }
+
+    public void setPercentualVariacao(BigDecimal percentualVariacao) {
+        this.percentualVariacao = percentualVariacao;
+    }
+
+    public BigDecimal getVariacao() {
+        return variacao.setScale(2, BigDecimal.ROUND_UP);
+    }
+
+    public void setVariacao(BigDecimal variacao) {
+        this.variacao = variacao;
     }
 }

@@ -8,9 +8,11 @@ public class PosicaoPorAtivo {
 
     private AtivoPortfolioRendaVariavel ativoPortfolioRendaVariavel;
 
-    private CotacaoAtivoResponse cotacaoAtivoResponse;
+    private BigDecimal lucroPrejuizo = BigDecimal.ZERO;
 
-    private BigDecimal lucroPrejuizo = new BigDecimal(0);
+    private BigDecimal valorTotalInvestido = BigDecimal.ZERO;
+
+    private BigDecimal valorTotalAtual = BigDecimal.ZERO;
 
     public AtivoPortfolioRendaVariavel getAtivoPortfolioRendaVariavel() {
         return ativoPortfolioRendaVariavel;
@@ -20,19 +22,27 @@ public class PosicaoPorAtivo {
         this.ativoPortfolioRendaVariavel = ativoPortfolioRendaVariavel;
     }
 
-    public CotacaoAtivoResponse getCotacaoAtivoResponse() {
-        return cotacaoAtivoResponse;
-    }
-
-    public void setCotacaoAtivoResponse(CotacaoAtivoResponse cotacaoAtivoResponse) {
-        this.cotacaoAtivoResponse = cotacaoAtivoResponse;
-    }
-
     public BigDecimal getLucroPrejuizo() {
-        return lucroPrejuizo;
+        return lucroPrejuizo.setScale(2, BigDecimal.ROUND_UP);
     }
 
     public void setLucroPrejuizo(BigDecimal lucroPrejuizo) {
         this.lucroPrejuizo = lucroPrejuizo;
+    }
+
+    public BigDecimal getValorTotalInvestido() {
+        return valorTotalInvestido.setScale(2, BigDecimal.ROUND_UP);
+    }
+
+    public void setValorTotalInvestido(BigDecimal valorTotalInvestido) {
+        this.valorTotalInvestido = valorTotalInvestido;
+    }
+
+    public BigDecimal getValorTotalAtual() {
+        return valorTotalAtual.setScale(2, BigDecimal.ROUND_UP);
+    }
+
+    public void setValorTotalAtual(BigDecimal valorTotalAtual) {
+        this.valorTotalAtual = valorTotalAtual;
     }
 }

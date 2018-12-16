@@ -8,11 +8,11 @@ public class Posicao {
 
     private List<PosicaoPorAtivo> listaPosicaoPorAtivos = new ArrayList<>();
 
-    private BigDecimal lucroPrejuizo = new BigDecimal(0);
+    private BigDecimal lucroPrejuizo = BigDecimal.ZERO;
 
-    private BigDecimal valorInvestido = new BigDecimal(0);
+    private BigDecimal valorInvestido = BigDecimal.ZERO;
 
-    private BigDecimal valorAtual = new BigDecimal(0);
+    private BigDecimal valorAtual = BigDecimal.ZERO;
 
     public List<PosicaoPorAtivo> getListaPosicaoPorAtivos() {
         return listaPosicaoPorAtivos;
@@ -23,7 +23,7 @@ public class Posicao {
     }
 
     public BigDecimal getLucroPrejuizo() {
-        return lucroPrejuizo;
+        return lucroPrejuizo.setScale(2, BigDecimal.ROUND_UP);
     }
 
     public void setLucroPrejuizo(BigDecimal lucroPrejuizo) {
@@ -31,7 +31,7 @@ public class Posicao {
     }
 
     public BigDecimal getValorInvestido() {
-        return valorInvestido;
+        return valorInvestido.setScale(2, BigDecimal.ROUND_UP);
     }
 
     public void setValorInvestido(BigDecimal valorInvestido) {
@@ -39,7 +39,7 @@ public class Posicao {
     }
 
     public BigDecimal getValorAtual() {
-        return valorAtual;
+        return valorAtual.setScale(2, BigDecimal.ROUND_UP);
     }
 
     public void setValorAtual(BigDecimal valorAtual) {
